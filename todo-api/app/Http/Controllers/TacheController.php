@@ -162,12 +162,24 @@ class TacheController extends Controller
      * @param  \App\Models\tache  $tache
      * @return \Illuminate\Http\Response
      */
-    public function destroy(tache $tache)
+    // public function destroy(tache $tache)
+    // {
+    //     $this->authorize('delete', $tache);
+        
+    //     $tache->delete();
+        
+    //     return response()->json(null, 204);
+    // }
+
+        public function destroy(tache $tache)
     {
-        $this->authorize('delete', $tache);
-        
+        if (Auth::id() !== $tache->user_id) {
+            return response()->json(['message' => 'Action non autorisée'], 403);
+        }
+
         $tache->delete();
-        
+
         return response()->json(null, 204);
     }
+
 }
