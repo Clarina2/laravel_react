@@ -22,6 +22,9 @@ import Dashboard from './pages/Dashboard';
 import LoginForm from './pages/login';
 import RegisterForm from './pages/register';
 import PrivateRoute from './pages/PrivateRoute';
+import TaskForm from './components/TaskForm';   
+import TaskList from './components/TaskList';
+import TaskItem from './components/TaskItem';
 const App = () => { 
   return ( 
     <Router> 
@@ -35,8 +38,9 @@ const App = () => {
             <Dashboard/>
           </PrivateRoute>
         } /> 
-         
-        
+        <Route path="/taskform" element={<TaskForm/>} /> 
+        <Route path="/tasklist" element={<TaskList/>} /> 
+        <Route path="/taskitem" element={<TaskItem/>} /> 
       </Routes> 
     </Router> 
   );
