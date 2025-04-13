@@ -147,14 +147,26 @@ class TacheController extends Controller
      * @param  \App\Models\Tache  $tache
      * @return \Illuminate\Http\Response
      */
-    public function toggle(Tache $tache)
+    // public function toggle(Tache $tache)
+    // {
+    //     // $this->authorize('update', $tache);
+        
+    //     $tache->update(['completed' => !$tache->completed]);
+        
+    //     return $tache;
+    // }
+
+        public function toggle(Tache $tache)
     {
-        $this->authorize('update', $tache);
-        
+        if (auth()->id() !== $tache->user_id) {
+            return response()->json(['message' => 'Action non autorisée'], 403);
+        }
+
         $tache->update(['completed' => !$tache->completed]);
-        
-        return $tache;
+
+        return response()->json($tache);
     }
+
 
     /**
      * Remove the specified resource from storage.
