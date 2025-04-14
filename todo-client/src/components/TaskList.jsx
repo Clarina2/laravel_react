@@ -3,14 +3,7 @@ import TaskForm from './TaskForm';
 import TaskItem from './TaskItem';
 import api from '../api/axios';
 
-const fetchTasks = async () => {
-  try {
-    const response = await api.get('/taches');
-    setTasks(response.data);
-  } catch (error) {
-    // Gestion des erreurs
-  }
-};
+
 
 const TaskList = () => {
   const [tasks, setTasks] = useState([]);
@@ -20,9 +13,18 @@ const TaskList = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
+  // useEffect(() => {
+  //   fetchTasks();
+  // }, []);
+
   useEffect(() => {
-    fetchTasks();
-  }, []);
+    if (filter === 'all') {
+      fetchTasks(); // toutes les tâches de l'utilisateur connecté
+    } else {
+      fetchTasksByStatus(filter); // appel backend avec filtre
+    }
+  }, [filter]);
+  
 
   const fetchTasks = async () => {
     const token = localStorage.getItem('token');
@@ -164,10 +166,36 @@ const TaskList = () => {
     return matchFilter && matchUser;
   });
 
+
+  const fetchTasksByStatus = async (status) => {
+    const token = localStorage.getItem('token');
+  
+    try {
+      setLoading(true);
+      setError(null);
+      const res = await fetch(`http://localhost:8000/api/taches/status/${status}`, {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+        },
+      });
+  
+      if (!res.ok) throw new Error(`Erreur HTTP: ${res.status}`);
+  
+      const data = await res.json();
+      setTasks(data);
+    } catch (error) {
+      setError(error.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+      
+
   return (
     <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
       {/* 🧾 Formulaire */}
-      <div className="bg-white shadow-md rounded-2xl p-6 border border-gray-100 mb-8">
+      <div className="bg-white shadow-md rounded-2xl p-6 border border-gray-100 mb-8 w-150">
         <TaskForm
           onSubmit={addOrUpdateTask}
           selectedTask={editingTask}

@@ -15,44 +15,9 @@ class TacheController extends Controller
      */
     public function index()
     {
-        // $user = tache::user();
-        // $tache = \App\Models\tache::with('user')->latest()->get();
-    
-        // return response()->json([
-        //     'me' => $user->id,
-        //     'tache' => $tache
-        // ]);
-
         $taches = Auth::user()->taches()->latest()->get();
         return response()->json($taches);
         
-        // // Filtre par statut
-        // if ($request->has('statut')) {
-        //     $query->where('completed', $request->statut === 'termine');
-        // }
-        
-        // // Filtre par catégorie (option bonus)
-        // if ($request->has('categorie')) {
-        //     $query->where('category', $request->categorie);
-        // }
-        
-        // // Option bonus: voir les tâches des autres utilisateurs
-        // if ($request->has('voir_tous') && $request->voir_tous === 'true') {
-        //      // Admin peut voir toutes les tâches
-        //      if (Auth::user()->is_admin) {
-        //         return $query->with('user')->latest()->get();
-        //     }
-        //     // Sinon seulement les tâches publiques des autres
-        //     $query->where(function($q) {
-        //         $q->where('user_id', Auth::id())
-        //           ->orWhere('is_public', true);
-        //     });
-        // } else {
-        //     // Par défaut, seulement les tâches de l'utilisateur
-        //     $query->where('user_id', Auth::id());
-        // }
-        
-        // return $query->latest()->get();
     }
    
 
@@ -193,5 +158,36 @@ class TacheController extends Controller
 
         return response()->json(null, 204);
     }
+
+
+    public function filterByStatus($status)
+    {
+        $user = Auth::user(); // Auth sécurisé
+        
+        if (!$user) {
+            return response()->json(['message' => 'Non authentifié'], 401);
+        }
+    
+        $completed = $status === 'completed';
+        
+        $taches = $user->taches()->where('completed', $completed)->get();
+        
+        return response()->json($taches);
+    }
+    
+    public function allTasks()
+    {
+        $tasks = Task::with('user')->get();
+        return response()->json($tasks);
+    }
+       
+    public function getAllWithUser()
+    {
+        $taches = \App\Models\Tache::with('user')->latest()->get();
+        return response()->json($taches);
+    }
+    
+
+    
 
 }

@@ -1,6 +1,23 @@
 import TaskList from "../components/TaskList";
 
 
+const handleLogout = async () => {
+  try {
+    await fetch('http://localhost:8000/api/logout', {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem('token')}`,
+      },
+    });
+
+    localStorage.removeItem('token');
+    window.location.href = '/login';
+  } catch (error) {
+    console.error('Erreur lors de la déconnexion :', error);
+  }
+};
+
+
 const Dashboard = () => {
     return (
         <div className="flex h-screen bg-gray-100">
@@ -54,7 +71,21 @@ const Dashboard = () => {
     {/* Main Content */}
     <div className="flex-1 overflow-auto p-8">
       <h1 className="text-3xl font-bold text-gray-800 mb-6">Tableau de bord</h1>
-      
+       
+      <li className="pl-4"> {/* décalage vers la droite */}
+        <button 
+          onClick={handleLogout} 
+          className="flex items-center gap-3 px-4 py-2 rounded-2xl bg-green-400 text-white shadow-md hover:bg-red-700 transition duration-300 translate-x-198  -translate-y-18"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+            <path fillRule="evenodd" d="M3 4a1 1 0 011-1h6a1 1 0 110 2H5v10h5a1 1 0 110 2H4a1 1 0 01-1-1V4zm10.707 5.293a1 1 0 00-1.414 1.414L14.586 12H9a1 1 0 100 2h5.586l-2.293 2.293a1 1 0 101.414 1.414l4-4a1 1 0 000-1.414l-4-4z" clipRule="evenodd" />
+          </svg>
+          <span className="font-semibold">Déconnexion</span>
+        </button>
+      </li>
+
+
+
       {/* User Info Section */}
       <div className="bg-white p-6 rounded-lg shadow-md mb-8">
         <div className="flex items-center space-x-4">
@@ -175,7 +206,13 @@ const Dashboard = () => {
             </div>
             <div>
               <p className="text-gray-800 font-medium">taches Utilisateurs</p>
-              <TaskList />
+
+              
+                <TaskList />
+             
+             
+              
+
             </div>
           </div>
           

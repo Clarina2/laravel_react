@@ -34,7 +34,12 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::patch('/taches/{tache}/toggle', [TacheController::class, 'toggle']);
     Route::put('/taches/{tache}', [TacheController::class, 'update']);
     Route::delete('/taches/{tache}', [TacheController::class, 'destroy']);
-    
-   
-    
 });
+
+Route::middleware('auth:sanctum')->get('/taches/status/{status}', [TacheController::class, 'filterByStatus']);
+
+Route::middleware('auth:sanctum')->get('/tasks/all', [TaskController::class, 'allTasks']);
+  
+Route::middleware('auth:sanctum')->get('/taches/all', [TacheController::class, 'getAllWithUser']); // si tu veux voir les tâches de tout le monde
+Route::middleware('auth:sanctum')->patch('/taches/toggle/{tache}', [TacheController::class, 'toggle']);
+

@@ -25,6 +25,8 @@ import PrivateRoute from './pages/PrivateRoute';
 import TaskForm from './components/TaskForm';   
 import TaskList from './components/TaskList';
 import TaskItem from './components/TaskItem';
+import TacheList from './components/filtre';  
+
 const App = () => { 
   return ( 
     <Router> 
@@ -41,6 +43,7 @@ const App = () => {
         <Route path="/taskform" element={<TaskForm/>} /> 
         <Route path="/tasklist" element={<TaskList/>} /> 
         <Route path="/taskitem" element={<TaskItem/>} /> 
+        <Route path="/tachelist" element={<TacheList/>} />
       </Routes> 
     </Router> 
   );
